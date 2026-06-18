@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en" title="System Check">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Exam System Check</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --light: #f8f9ff;
+            --dark: #333344;
+            --text: #444;
+            --text-light: #666;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f5 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Main Container - Centered */
+        .main-wrapper {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 30px;
+        }
+
+        .P-title {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .right-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .links {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .links:hover {
+            color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .links::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .links:hover::after {
+            width: 80%;
+        }
+
+        /* Main Content */
+        .table {
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+        }
+
+        /* Header Section */
+        .table__header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 50px 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table__header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .table__header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .table__header p {
+            font-size: 18px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Body Section */
+        .table__body {
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .check-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 30px;
+            background: var(--light);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .check-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .device-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .device-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .device-details h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .device-details p {
+            font-size: 14px;
+            color: var(--text-light);
+            max-width: 300px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 160px;
+            justify-content: center;
+        }
+
+        .status-available {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-available i {
+            color: var(--success);
+        }
+
+        .status-unavailable {
+            background: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .status-unavailable i {
+            color: var(--danger);
+        }
+
+        .status-checking {
+            background: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 152, 0, 0.3);
+            border-top: 2px solid var(--warning);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .system-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .summary-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .summary-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .summary-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .summary-content p {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Button Section */
+        .section-button {
+            padding: 30px 40px;
+            text-align: center;
+            background: var(--light);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            width: 100%;
+        }
+
+        .nextButton {
+            display: inline-block;
+        }
+
+        .next {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            border: none;
+            min-width: 250px;
+        }
+
+        .next:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .next:active {
+            transform: translateY(-2px);
+        }
+
+        .next:disabled {
+            background: linear-gradient(135deg, #cccccc, #aaaaaa);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+            width: 100%;
+            max-width: 900px;
+            margin-top: auto;
+        }
+
+        .box-footer1 {
+            font-size: 15px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                justify-content: flex-start;
+                min-height: 100vh;
+            }
+
+            .main-wrapper {
+                max-width: 95%;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px 0;
+                margin-bottom: 20px;
+            }
+
+            .right-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .table__header {
+                padding: 40px 25px;
+            }
+
+            .table__header h1 {
+                font-size: 30px;
+            }
+
+            .table__header p {
+                font-size: 16px;
+            }
+
+            .table__body {
+                padding: 40px 25px;
+                gap: 25px;
+            }
+
+            .check-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                padding: 25px;
+            }
+
+            .status-indicator {
+                align-self: stretch;
+                justify-content: center;
+            }
+
+            .status-badge {
+                min-width: 100%;
+                padding: 12px 20px;
+            }
+
+            .section-button {
+                padding: 25px 30px;
+            }
+
+            .next {
+                padding: 16px 35px;
+                font-size: 16px;
+                min-width: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .P-title {
+                font-size: 22px;
+                text-align: center;
+            }
+
+            .right-links {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .links {
+                text-align: center;
+                width: 100%;
+                padding: 10px;
+            }
+
+            .table__header {
+                padding: 30px 20px;
+            }
+
+            .table__header h1 {
+                font-size: 26px;
+            }
+
+            .table__header p {
+                font-size: 15px;
+            }
+
+            .table__body {
+                padding: 30px 20px;
+            }
+
+            .check-item {
+                padding: 20px;
+            }
+
+            .device-info {
+                gap: 15px;
+            }
+
+            .device-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+
+            .device-details h3 {
+                font-size: 16px;
+            }
+
+            .device-details p {
+                font-size: 13px;
+            }
+
+            .system-summary {
+                padding: 25px 20px;
+            }
+
+            .summary-header h3 {
+                font-size: 18px;
+            }
+
+            .summary-content p {
+                font-size: 14px;
+            }
+
+            .next {
+                padding: 15px 30px;
+                font-size: 15px;
+                min-width: 200px;
+            }
+        }
+
+        /* Extra small devices */
+        @media (max-width: 360px) {
+            .table__header h1 {
+                font-size: 24px;
+            }
+
+            .check-item {
+                padding: 18px;
+            }
+
+            .status-badge {
+                font-size: 13px;
+                padding: 10px 15px;
+            }
+
+            .next {
+                padding: 14px 25px;
+                font-size: 14px;
+            }
+        }
+
+        /* Height adjustments for very small screens */
+        @media (max-height: 700px) {
+            body {
+                padding: 15px;
+            }
+
+            .table__header {
+                padding: 30px 25px;
+            }
+
+            .table__body {
+                padding: 30px 25px;
+                gap: 20px;
+            }
+
+            .check-item {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+
+            .section-button {
+                padding: 20px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <nav>
+            <div class="left-links">
+                <p class="P-title">The Online CheatBuster</p>
+            </div>
+            <div class="right-links">
+                <a class="links" href="#">Rules</a>
+                <a class="links" href="#">Requirements</a>
+            </div>
+        </nav>
+
+        <main class="table">
+            <section class="table__header">
+                <h1>System Compatibility Check</h1>
+                <p>Verifying your device capabilities for the online proctored exam</p>
+            </section>
+
+            <section class="table__body">
+                <div class="check-container">
+                    <div class="check-item">
+                        <div class="device-info">
+                            <div class="device-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="device-details">
+                                <h3>Webcam</h3>
+                                <p>Required for facial recognition and live monitoring during exam</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator">
+                            <div id="webcam-status" class="status-badge status-checking">
+                                <div class="loading-spinner"></div>
+                                Checking...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="check-item">
+                        <div class="device-info">
+                            <div class="device-icon">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <div class="device-details">
+                                <h3>Microphone</h3>
+                                <p>Required for audio monitoring and voice detection</p>
+                            </div>
+                        </div>
+                        <div class="status-indicator">
+                            <div id="microphone-status" class="status-badge status-checking">
+                                <div class="loading-spinner"></div>
+                                Checking...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="system-summary">
+                    <div class="summary-header">
+                        <div class="summary-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <h3>Important Information</h3>
+                    </div>
+                    <div class="summary-content">
+                        <p>Both webcam and microphone are mandatory for the online proctored exam. Please ensure you
+                            grant the necessary permissions when prompted by your browser. Without these devices, you
+                            will not be able to proceed with the exam.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-button">
+                <div class="nextButton">
+                    <a href="#" class="next" id="ajax-link">
+                        <i class="fas fa-arrow-right"></i> Continue to Exam
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container8">
+                <div>
+                    <p class="box-footer1">&copy; The Online CheatBuster - Advanced Proctoring System</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        async function checkWebcamAndMicrophone() {
+            const webcamStatusElement = document.getElementById('webcam-status');
+            const microphoneStatusElement = document.getElementById('microphone-status');
+            const nextButton = document.getElementById('ajax-link');
+
+            try {
+                // Show checking status
+                webcamStatusElement.innerHTML = '<div class="loading-spinner"></div> Checking...';
+                microphoneStatusElement.innerHTML = '<div class="loading-spinner"></div> Checking...';
+
+                // Test both camera and microphone with better error handling
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: "user"
+                    },
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 44100
+                    }
+                };
+
+                if (!navigator.mediaDevices) {
+                    alert("Camera/Microphone access blocked by browser. You must access this site via 'http://127.0.0.1:5001' or 'http://localhost:5001' (or use HTTPS).");
+                    throw new Error("MediaDevices undefined");
+                }
+
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+                // Check if video and audio tracks are actually available
+                const videoTracks = stream.getVideoTracks();
+                const audioTracks = stream.getAudioTracks();
+
+                if (videoTracks.length > 0) {
+                    webcamStatusElement.innerHTML = '<i class="fas fa-check-circle"></i> Available';
+                    webcamStatusElement.className = 'status-badge status-available';
+                } else {
+                    webcamStatusElement.innerHTML = '<i class="fas fa-times-circle"></i> Not Available';
+                    webcamStatusElement.className = 'status-badge status-unavailable';
+                }
+
+                if (audioTracks.length > 0) {
+                    microphoneStatusElement.innerHTML = '<i class="fas fa-check-circle"></i> Available';
+                    microphoneStatusElement.className = 'status-badge status-available';
+                } else {
+                    microphoneStatusElement.innerHTML = '<i class="fas fa-times-circle"></i> Not Available';
+                    microphoneStatusElement.className = 'status-badge status-unavailable';
+                }
+
+                // Stop all tracks
+                stream.getTracks().forEach(track => track.stop());
+
+                // Show success message if both are available
+                if (videoTracks.length > 0 && audioTracks.length > 0) {
+                    console.log("All devices available. You can proceed with the exam.");
+                }
+
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+
+                // More specific error messages
+                if (error.name === 'NotAllowedError') {
+                    webcamStatusElement.innerHTML = '<i class="fas fa-ban"></i> Permission Denied';
+                    microphoneStatusElement.innerHTML = '<i class="fas fa-ban"></i> Permission Denied';
+                } else if (error.name === 'NotFoundError') {
+                    webcamStatusElement.innerHTML = '<i class="fas fa-times-circle"></i> No Device Found';
+                    microphoneStatusElement.innerHTML = '<i class="fas fa-times-circle"></i> No Device Found';
+                } else if (error.name === 'NotReadableError') {
+                    webcamStatusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Device Busy';
+                    microphoneStatusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Device Busy';
+                } else {
+                    webcamStatusElement.innerHTML = '<i class="fas fa-times-circle"></i> Not Available';
+                    microphoneStatusElement.innerHTML = '<i class="fas fa-times-circle"></i> Not Available';
+                }
+
+                webcamStatusElement.className = 'status-badge status-unavailable';
+                microphoneStatusElement.className = 'status-badge status-unavailable';
+            }
+        }
+
+        // Run the check when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            checkWebcamAndMicrophone();
+
+            // Add smooth scroll to top on load
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Add a click event handler to the anchor element
+            $("#ajax-link").click(function (event) {
+                event.preventDefault(); // Prevent the default behavior of navigating to a new page
+
+                // Show loading state
+                const originalText = $(this).html();
+                $(this).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+                $(this).attr('disabled', true);
+
+                // Get the text content of the elements
+                const checkValue1 = document.getElementById('webcam-status').textContent.trim();
+                const checkValue2 = document.getElementById('microphone-status').textContent.trim();
+
+                // Check if devices are available before proceeding
+                if (checkValue1.includes('Not Available') || checkValue1.includes('Denied') ||
+                    checkValue2.includes('Not Available') || checkValue2.includes('Denied')) {
+
+                    alert('Warning: Some required devices are not available. You may face issues during the exam.');
+
+                    // Ask for confirmation
+                    if (!confirm("Some devices are not available. Do you want to proceed anyway?")) {
+                        $(this).html(originalText);
+                        $(this).attr('disabled', false);
+                        return false;
+                    }
+                }
+
+                // Perform the AJAX request using jQuery's $.ajax() function
+                $.ajax({
+                    url: "/systemCheck",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        webcam: checkValue1,
+                        microphone: checkValue2,
+                        timestamp: new Date().toISOString()
+                    }),
+                    success: function (response) {
+                        console.log('Server Response:', response);
+
+                        if (response['output']) {
+                            // Redirect to result.html on success
+                            window.location.href = "/" + response['output'];
+                        } else {
+                            alert('No redirect URL received from server');
+                            $(this).html(originalText);
+                            $(this).attr('disabled', false);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle errors here if needed
+                        console.error("AJAX request failed:", error);
+                        alert('An error occurred. Please try again.');
+
+                        // Reset button text on error
+                        $("#ajax-link").html(originalText);
+                        $("#ajax-link").attr('disabled', false);
+                    },
+                    timeout: 10000 // 10 second timeout
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

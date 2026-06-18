@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result - Passed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Congratulations.css') }}">
+</head>
+<body style="background-color: #e2e2e2;">
+    <nav>
+        <div class="left-links">
+            <p class="P-title">The Online CheatBuster</p>
+        </div>
+        <div class="right-links">
+            <a class="links" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+    <section>
+        <span class="overlay"></span>
+        <div class="modal-box">
+            <img src="{{ url_for('static', filename='img/reward.png') }}" alt="Icon" width="70" height="70" />
+            <h2>Congratulations</h2>
+            <ul>
+                {% if result %}
+                    <li>Name: {{ result.get('Name') or result.get('student_name', 'N/A') }}</li>
+                    <li>Test Score: {{ result.get('percentage', result.get('TotalMark', 0)) }}%</li>
+                    <li>Exam Status: Passed</li>
+                    <li>Date: {{ result.get('submission_time', result.get('Date', '')) }}</li>
+                {% elif result_status %}
+                    {% set r = result_status.split(';') %}
+                    <li>Name: {{ r[0] }}</li>
+                    <li>Test Score: {{ r[1] }}%</li>
+                    <li>Exam Status: {{ r[2] }}</li>
+                    <li>Date: {{ r[3] }}</li>
+                {% endif %}
+            </ul>
+        </div>
+    </section>
+    <footer>
+        <div class="container8">
+            <p class="box-footer1">&copy; The Online CheatBuster</p>
+        </div>
+    </footer>
+    <script src="{{ url_for('static', filename='js/confetti.js') }}"></script>
+    <script>
+        window.onload = () => {
+            const section = document.querySelector("section");
+            const overlay = document.querySelector(".overlay");
+            section.classList.add("active");
+            if (typeof confetti !== 'undefined') {
+                confetti.start();
+                setTimeout(() => confetti.stop(), 3000);
+            }
+            overlay.addEventListener("click", () => section.classList.remove("active"));
+        };
+    </script>
+</body>
+</html>

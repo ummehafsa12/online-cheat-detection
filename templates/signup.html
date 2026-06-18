@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	<title>Student Signup - Online CheatBuster</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-family: 'Poppins', sans-serif;
+			padding: 20px;
+		}
+
+		.signup-container {
+			background: white;
+			border-radius: 15px;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+			max-width: 500px;
+			width: 100%;
+			padding: 40px;
+			animation: slideUp 0.5s ease-out;
+			position: relative;
+			overflow: hidden;
+		}
+
+		@keyframes slideUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* Welcome Message - White Text */
+		.welcome-message {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 15px 20px;
+			border-radius: 10px;
+			margin-bottom: 25px;
+			text-align: center;
+			font-size: 16px;
+			font-weight: 500;
+			box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+		}
+
+		.signup-header {
+			text-align: center;
+			margin-bottom: 25px;
+		}
+
+		.signup-header h1 {
+			color: #333;
+			font-weight: 700;
+			margin-bottom: 8px;
+			font-size: 28px;
+		}
+
+		.signup-header p {
+			color: #666;
+			font-size: 14px;
+			margin-bottom: 0;
+		}
+
+		.header-icon {
+			font-size: 50px;
+			color: #667eea;
+			margin-bottom: 15px;
+			display: inline-block;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+		}
+
+		.form-group label {
+			color: #333;
+			font-weight: 600;
+			margin-bottom: 8px;
+			font-size: 14px;
+			display: flex;
+			align-items: center;
+		}
+
+		.form-group label i {
+			margin-right: 8px;
+			font-size: 16px;
+		}
+
+		.form-control {
+			border: 2px solid #e0e0e0;
+			border-radius: 8px;
+			padding: 12px 15px;
+			font-size: 14px;
+			transition: all 0.3s;
+		}
+
+		.form-control:focus {
+			border-color: #667eea;
+			box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+		}
+
+		.btn-signup {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			border: none;
+			padding: 12px;
+			border-radius: 8px;
+			font-weight: 600;
+			width: 100%;
+			cursor: pointer;
+			transition: all 0.3s;
+			margin-top: 15px;
+			font-size: 16px;
+		}
+
+		.btn-signup:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+		}
+
+		.login-link {
+			text-align: center;
+			margin-top: 25px;
+			color: #666;
+			font-size: 14px;
+			padding-top: 20px;
+			border-top: 1px solid #eee;
+		}
+
+		.login-link a {
+			color: #667eea;
+			text-decoration: none;
+			font-weight: 600;
+			transition: all 0.3s;
+		}
+
+		.login-link a:hover {
+			color: #764ba2;
+			text-decoration: underline;
+		}
+
+		.alert {
+			border-radius: 8px;
+			border: none;
+			margin-bottom: 20px;
+			padding: 12px 15px;
+			font-size: 14px;
+		}
+
+		.password-strength {
+			margin-top: 8px;
+			height: 4px;
+			border-radius: 2px;
+			background: #eee;
+			overflow: hidden;
+		}
+
+		.strength-bar {
+			height: 100%;
+			width: 0%;
+			transition: all 0.3s;
+			border-radius: 2px;
+		}
+
+		.terms {
+			font-size: 13px;
+			color: #666;
+			margin-top: 15px;
+			display: flex;
+			align-items: flex-start;
+		}
+
+		.terms input {
+			margin-right: 10px;
+			margin-top: 3px;
+		}
+
+		.terms label {
+			font-weight: normal;
+			line-height: 1.4;
+		}
+
+		.form-text {
+			font-size: 12px;
+			margin-top: 5px;
+		}
+
+		/* Responsive Design */
+		@media (max-width: 576px) {
+			.signup-container {
+				padding: 25px 20px;
+			}
+			
+			.signup-header h1 {
+				font-size: 24px;
+			}
+			
+			.welcome-message {
+				font-size: 14px;
+				padding: 12px 15px;
+			}
+			
+			.header-icon {
+				font-size: 40px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="signup-container">
+		<!-- Welcome Message -->
+		<div class="welcome-message">
+			<i class='bx bxs-bullhorn' style="font-size: 18px; vertical-align: middle; margin-right: 8px;"></i>
+			Hello, Everyone! Enter your personal details and start your journey with us.
+		</div>
+
+		<div class="signup-header">
+			<div class="header-icon">
+				<i class='bx bxs-user-plus'></i>
+			</div>
+			<h1>Student Registration</h1>
+			<p>Create your account to take exams</p>
+		</div>
+
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				{% for category, message in messages %}
+					<div class="alert alert-{{ 'success' if category == 'success' else 'danger' }}" role="alert">
+						{% if category == 'success' %}
+							<i class='bx bx-check-circle' style="margin-right: 8px;"></i>
+						{% else %}
+							<i class='bx bx-error-circle' style="margin-right: 8px;"></i>
+						{% endif %}
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+
+		<form action="{{ url_for('studentSignup') }}" method="POST" enctype="multipart/form-data" id="signupForm">
+			<div class="form-group">
+				<label><i class='bx bxs-user'></i> Full Name</label>
+				<input type="text" class="form-control" name="username" placeholder="Enter your full name" required>
+			</div>
+
+			<div class="form-group">
+				<label><i class='bx bxs-envelope'></i> Email Address</label>
+				<input type="email" class="form-control" name="email" placeholder="Enter your email" required>
+			</div>
+
+			<div class="form-group">
+				<label><i class='bx bxs-lock'></i> Password</label>
+				<input type="password" class="form-control" name="password" id="password" placeholder="Enter password (min 6 characters)" required onkeyup="checkPasswordStrength()">
+				<div class="password-strength">
+					<div class="strength-bar" id="strengthBar"></div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label><i class='bx bxs-lock-alt'></i> Confirm Password</label>
+				<input type="password" class="form-control" name="confirm_password" placeholder="Confirm password" required>
+			</div>
+
+			<div class="form-group">
+				<label><i class='bx bxs-camera'></i> Profile Photo (Optional)</label>
+				<input type="file" class="form-control" name="profile_image" accept="image/*">
+				<small class="form-text text-muted">JPG, PNG up to 5MB</small>
+			</div>
+
+			<div class="terms">
+				<input type="checkbox" name="terms" id="terms" required>
+				<label for="terms">I agree to the terms and conditions</label>
+			</div>
+
+			<button type="submit" class="btn-signup">
+				<i class='bx bxs-user-check'></i> Create Account
+			</button>
+		</form>
+
+		<div class="login-link">
+			<p>Already have an account? <a href="{{ url_for('studentLogin') }}">Login here</a></p>
+		</div>
+	</div>
+
+	<script>
+		function checkPasswordStrength() {
+			const password = document.getElementById('password').value;
+			const strengthBar = document.getElementById('strengthBar');
+			let strength = 0;
+
+			// Length check
+			if (password.length >= 6) strength += 25;
+			if (password.length >= 8) strength += 25;
+			
+			// Complexity checks
+			if (/[A-Z]/.test(password)) strength += 25;
+			if (/[0-9!@#$%^&*]/.test(password)) strength += 25;
+
+			// Update strength bar
+			strengthBar.style.width = strength + '%';
+			
+			// Change color based on strength
+			if (strength < 50) {
+				strengthBar.style.background = '#f44336'; // Red for weak
+			} else if (strength < 75) {
+				strengthBar.style.background = '#ff9800'; // Orange for medium
+			} else {
+				strengthBar.style.background = '#4caf50'; // Green for strong
+			}
+		}
+
+		document.getElementById('signupForm').addEventListener('submit', function(e) {
+			const password = document.querySelector('input[name="password"]').value;
+			const confirm = document.querySelector('input[name="confirm_password"]').value;
+			const terms = document.getElementById('terms').checked;
+
+			// Password match validation
+			if (password !== confirm) {
+				e.preventDefault();
+				alert('❌ Passwords do not match! Please make sure both passwords are same.');
+				return;
+			}
+
+			// Password length validation
+			if (password.length < 6) {
+				e.preventDefault();
+				alert('❌ Password must be at least 6 characters long!');
+				return;
+			}
+
+			// Terms validation
+			if (!terms) {
+				e.preventDefault();
+				alert('❌ Please agree to the terms and conditions!');
+				return;
+			}
+		});
+	</script>
+</body>
+</html>

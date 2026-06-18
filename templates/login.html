@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Online CheatBuster - Login & Registration</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/login.css')}}">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --danger-gradient: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            --light: #ffffff;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #6c757d;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .container {
+            background-color: var(--light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            min-height: 650px;
+            margin: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .auth-shell {
+            width: 100%;
+            max-width: 980px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mobile-form-switch {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 0 16px;
+            padding: 6px;
+            border-radius: 999px;
+            background: #e9eefb;
+            gap: 8px;
+        }
+
+        .mobile-form-switch button {
+            flex: 1;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 16px;
+            font-weight: 600;
+            background: transparent;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0;
+        }
+
+        .mobile-form-switch button.active {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(102, 126, 234, 0.22);
+        }
+
+        .logo h2 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Form Containers */
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.7s ease-in-out;
+            width: 50%;
+            padding: 50px 60px;
+            background: var(--light);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .form-container::-webkit-scrollbar-track {
+            background: var(--medium-gray);
+            border-radius: 10px;
+        }
+
+        .form-container::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        .login-container {
+            left: 0;
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .container.right-panel-active .login-container {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .register-container {
+            left: 0;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.right-panel-active .register-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.7s forwards;
+        }
+
+        @keyframes show {
+
+            0%,
+            49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+
+            100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        /* Overlay Section */
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.7s ease-in-out;
+            z-index: 10;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            background: var(--primary-gradient);
+            color: var(--light);
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.7s ease-in-out;
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.7s ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        /* Form Elements */
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .form-subtitle {
+            font-size: 16px;
+            color: var(--dark-gray);
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .overlay-panel h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+
+        .overlay-panel p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            max-width: 350px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px 14px 50px;
+            border: 2px solid var(--medium-gray);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 400;
+            background: var(--light);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-group input::placeholder {
+            color: var(--dark-gray);
+            font-weight: 400;
+        }
+
+        button {
+            background: var(--primary-gradient);
+            color: var(--light);
+            border: none;
+            padding: 15px 30px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.ghost {
+            background: transparent;
+            border: 2px solid var(--light);
+            color: var(--light);
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        button.ghost:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Flash Messages */
+        .flash-messages {
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        .error,
+        .success {
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error {
+            background: var(--danger-gradient);
+            color: var(--light);
+        }
+
+        .success {
+            background: var(--success-gradient);
+            color: var(--light);
+        }
+
+        /* Profile Picture Section */
+        .profile-section {
+            margin: 20px 0 25px 0;
+            text-align: center;
+        }
+
+        .profile-preview-container {
+            margin-bottom: 20px;
+        }
+
+        .profile-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #667eea;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+            background: var(--light-gray);
+        }
+
+        .upload-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .upload-option-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--medium-gray);
+            border-radius: var(--radius-sm);
+            background: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            max-width: 180px;
+        }
+
+        .upload-option-btn.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: #667eea;
+        }
+
+        .upload-option-btn i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .upload-option-btn span {
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-btn {
+            background: var(--light-gray);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            width: 100%;
+            border: 2px dashed var(--medium-gray);
+        }
+
+        .file-upload-btn:hover {
+            background: var(--medium-gray);
+            border-color: #667eea;
+        }
+
+        .file-upload-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .upload-text {
+            font-size: 13px;
+            color: var(--dark-gray);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .webcam-container {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .webcam-preview {
+            width: 200px;
+            height: 150px;
+            border-radius: var(--radius-sm);
+            border: 3px solid #4CAF50;
+            background: #000;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .capture-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .capture-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .capture-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .capture-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .capture-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .capture-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Required Field Indicator */
+        .required {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .field-note {
+            font-size: 13px;
+            color: var(--dark-gray);
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                min-height: 600px;
+            }
+
+            .form-container {
+                padding: 40px 50px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                align-items: flex-start;
+                padding: 12px;
+            }
+
+            .auth-shell {
+                max-width: 100%;
+            }
+
+            .mobile-form-switch {
+                display: flex;
+            }
+
+            .container {
+                width: 100%;
+                margin: 0;
+                min-height: 0;
+                height: auto;
+                border-radius: 15px;
+            }
+
+            .form-container {
+                width: 100%;
+                padding: 40px 30px;
+                position: relative;
+                min-height: auto;
+                height: auto;
+                overflow: visible;
+            }
+
+            .login-container {
+                opacity: 1;
+            }
+
+            .container.right-panel-active .login-container {
+                transform: translateX(0);
+                opacity: 0;
+                display: none;
+            }
+
+            .register-container {
+                opacity: 0;
+                display: none;
+            }
+
+            .container.right-panel-active .register-container {
+                transform: translateX(0);
+                opacity: 1;
+                display: block;
+            }
+
+            .overlay-container {
+                display: none;
+            }
+
+            .logo h2 {
+                font-size: 28px;
+            }
+
+            .upload-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .upload-option-btn {
+                max-width: 250px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .logo {
+                margin-bottom: 18px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .form-subtitle {
+                font-size: 14px;
+            }
+
+            .input-group input {
+                padding: 12px 15px 12px 45px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .profile-preview {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        /* Animation for form switching */
+        .form-switch-animation {
+            animation: formSwitch 0.7s ease-in-out;
+        }
+
+        @keyframes formSwitch {
+            0% {
+                opacity: 0.5;
+                transform: translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-shell">
+        <div class="logo">
+            <h2><i class='bx bxs-graduation'></i>Online CheatBuster </h2>
+        </div>
+
+        <div class="mobile-form-switch" id="mobileFormSwitch">
+            <button type="button" id="mobileSignIn" class="active">Sign In</button>
+            <button type="button" id="mobileSignUp">Create Account</button>
+        </div>
+
+        <div class="container" id="container">
+            <!-- Registration Form -->
+            <div class="form-container register-container">
+                <form action="{{url_for('register')}}" method="post" id="registerForm" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <h1>Create Account</h1>
+                    <p class="form-subtitle">Register as a student to get started</p>
+
+                    <!-- Profile Picture Section -->
+                    <div class="profile-section">
+                        <div class="profile-preview-container">
+                            <img src="{{url_for('static', filename='img/avatar.svg')}}" alt="Profile Preview"
+                                class="profile-preview" id="profilePreview"
+                                onerror="this.src='https://ui-avatars.com/api/?name=Student&background=667eea&color=fff&size=120'">
+                        </div>
+
+                        <div class="upload-options">
+                            <div class="upload-option-btn active" id="uploadOption" onclick="setUploadOption('upload')">
+                                <i class='bx bxs-cloud-upload'></i>
+                                <span>Upload Image</span>
+                            </div>
+                            <div class="upload-option-btn" id="webcamOption" onclick="setUploadOption('webcam')">
+                                <i class='bx bxs-camera'></i>
+                                <span>Use Webcam</span>
+                            </div>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="file-upload-wrapper" id="fileUploadSection">
+                            <div class="file-upload-btn">
+                                <i class='bx bxs-cloud-upload'></i> Choose Profile Picture
+                            </div>
+                            <input type="file" name="profile_picture" accept="image/*" onchange="previewImage(this)">
+                        </div>
+
+                        <!-- Webcam Capture -->
+                        <div class="webcam-container" id="webcamSection">
+                            <video id="webcam" class="webcam-preview" autoplay playsinline></video>
+                            <canvas id="canvas" style="display: none;"></canvas>
+                            <div class="capture-buttons">
+                                <button type="button" class="capture-btn capture-primary" onclick="capturePhoto()">
+                                    <i class='bx bxs-camera'></i> Capture Photo
+                                </button>
+                                <button type="button" class="capture-btn capture-secondary" onclick="toggleWebcam()">
+                                    <i class='bx bxs-x-circle'></i> Cancel
+                                </button>
+                            </div>
+                        </div>
+                        <p class="upload-text">Supported formats: JPG, PNG, JPEG (Maximum 5MB)</p>
+                    </div>
+                    <input type="hidden" name="webcam_image" id="webcamImage">
+
+                    <div class="input-group">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" name="fullname" placeholder="Full Name *" required />
+                        <small class="field-note">Enter your complete name as per official records</small>
+                    </div>
+
+                    <div class="input-group">
+                        <i class='bx bxs-envelope'></i>
+                        <input type="email" name="email" placeholder="Email Address *" required />
+                        <small class="field-note">We'll never share your email with anyone else</small>
+                    </div>
+
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" name="password" placeholder="Password *" required />
+                        <small class="field-note">Minimum 6 characters with letters and numbers</small>
+                    </div>
+
+                    <div class="input-group">
+                        <i class='bx bxs-lock'></i>
+                        <input type="password" name="confirm_password" placeholder="Confirm Password *" required />
+                        <small class="field-note">Re-enter your password for verification</small>
+                    </div>
+
+                    <!-- Flash Messages for Registration -->
+                    <div class="flash-messages">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        {% if category == 'register_error' %}
+                        <div class="error">
+                            <i class='bx bxs-error-circle'></i>
+                            {{ message }}
+                        </div>
+                        {% elif category == 'register_success' %}
+                        <div class="success">
+                            <i class='bx bxs-check-circle'></i>
+                            {{ message }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    <button type="submit">
+                        <i class='bx bxs-user-plus'></i> Create Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- Login Form -->
+            <div class="form-container login-container">
+                <form action="{{url_for('login')}}" method="post" id="loginForm">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <h1>Welcome Back</h1>
+                    <p class="form-subtitle">Sign in to your account to continue</p>
+
+                    <div class="input-group">
+                        <i class='bx bxs-user'></i>
+                        <input type="text" name="username" placeholder="Email Address *" required />
+                    </div>
+
+                    <div class="input-group">
+                        <i class='bx bxs-lock-alt'></i>
+                        <input type="password" name="password" placeholder="Password *" required />
+                    </div>
+                    <div style="text-align:right; margin-top:-6px; margin-bottom:14px;">
+                        <a href="{{ url_for('forgot_password') }}"
+                            style="font-size:13px; color:#667eea; text-decoration:none;">Forgot Password?</a>
+                    </div>
+
+                    <!-- Flash Messages for Login -->
+                    <div class="flash-messages">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                        {% if category == 'login_error' or category == 'error' %}
+                        <div class="error">
+                            <i class='bx bxs-error-circle'></i>
+                            {{ message }}
+                        </div>
+                        {% elif category == 'login_success' or category == 'success' %}
+                        <div class="success">
+                            <i class='bx bxs-check-circle'></i>
+                            {{ message }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+
+                    <button type="submit">
+                        <i class='bx bxs-log-in'></i> Sign In
+                    </button>
+                </form>
+            </div>
+
+            <!-- Overlay Section -->
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1>Welcome Back!</h1>
+                        <p>To continue your journey with us, please sign in with your credentials</p>
+                        <button class="ghost" id="signIn">
+                            <i class='bx bxs-log-in'></i> Sign In
+                        </button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1>Hello, Everyone!</h1>
+                        <p>Enter your personal details and start your educational journey with us today</p>
+                        <button class="ghost" id="signUp">
+                            <i class='bx bxs-user-plus'></i> Create Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const mobileSignUpButton = document.getElementById('mobileSignUp');
+        const mobileSignInButton = document.getElementById('mobileSignIn');
+        const container = document.getElementById('container');
+        let webcamStream = null;
+        let isFormSwitching = false;
+
+        function syncMobileSwitch() {
+            const isRegister = container.classList.contains('right-panel-active');
+            if (mobileSignUpButton) mobileSignUpButton.classList.toggle('active', isRegister);
+            if (mobileSignInButton) mobileSignInButton.classList.toggle('active', !isRegister);
+        }
+
+        signUpButton.addEventListener('click', () => {
+            if (isFormSwitching) return;
+            isFormSwitching = true;
+            container.classList.add('right-panel-active');
+            document.getElementById('registerForm').classList.add('form-switch-animation');
+            syncMobileSwitch();
+            setTimeout(() => {
+                isFormSwitching = false;
+            }, 700);
+        });
+
+        signInButton.addEventListener('click', () => {
+            if (isFormSwitching) return;
+            isFormSwitching = true;
+            container.classList.remove('right-panel-active');
+            document.getElementById('loginForm').classList.add('form-switch-animation');
+            syncMobileSwitch();
+            setTimeout(() => {
+                isFormSwitching = false;
+            }, 700);
+        });
+
+        if (mobileSignUpButton) {
+            mobileSignUpButton.addEventListener('click', () => signUpButton.click());
+        }
+        if (mobileSignInButton) {
+            mobileSignInButton.addEventListener('click', () => signInButton.click());
+        }
+
+        // Profile Picture Upload Functions
+        function setUploadOption(option) {
+            const uploadOption = document.getElementById('uploadOption');
+            const webcamOption = document.getElementById('webcamOption');
+            const fileUploadSection = document.getElementById('fileUploadSection');
+            const webcamSection = document.getElementById('webcamSection');
+
+            if (option === 'upload') {
+                uploadOption.classList.add('active');
+                webcamOption.classList.remove('active');
+                fileUploadSection.style.display = 'block';
+                webcamSection.style.display = 'none';
+                stopWebcam();
+            } else {
+                uploadOption.classList.remove('active');
+                webcamOption.classList.add('active');
+                fileUploadSection.style.display = 'none';
+                webcamSection.style.display = 'block';
+                startWebcam();
+            }
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    showAlert('File size must be less than 5MB', 'error');
+                    input.value = '';
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.match('image.*')) {
+                    showAlert('Please select an image file (JPG, PNG, JPEG)', 'error');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('profilePreview').src = e.target.result;
+                    const hiddenInput = document.getElementById('webcamImage');
+                    if (hiddenInput) hiddenInput.value = e.target.result;
+                    showAlert('Image loaded successfully!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function startWebcam() {
+            try {
+                if (!navigator.mediaDevices) {
+                    showAlert("Camera access blocked by browser. You must access this site via 'http://127.0.0.1:5001' or 'http://localhost:5001' (or use HTTPS).", 'error');
+                    setUploadOption('upload');
+                    return;
+                }
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'user'
+                    }
+                });
+                const video = document.getElementById('webcam');
+                video.srcObject = stream;
+                webcamStream = stream;
+                showAlert('Webcam activated. Click "Capture Photo" to take picture.', 'success');
+            } catch (err) {
+                console.error('Error accessing webcam:', err);
+                showAlert('Cannot access webcam. Please check permissions or use upload option.', 'error');
+                setUploadOption('upload');
+            }
+        }
+
+        function stopWebcam() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('webcam');
+            const canvas = document.getElementById('canvas');
+            const preview = document.getElementById('profilePreview');
+            const hiddenInput = document.getElementById('webcamImage');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg', 0.9);
+            preview.src = imageData;
+            hiddenInput.value = imageData;
+
+            showAlert('Photo captured successfully!', 'success');
+            stopWebcam();
+            setUploadOption('upload');
+        }
+
+        function toggleWebcam() {
+            stopWebcam();
+            setUploadOption('upload');
+        }
+
+        function showAlert(message, type) {
+            // Create alert element
+            const alertDiv = document.createElement('div');
+            alertDiv.className = type === 'error' ? 'error' : 'success';
+            alertDiv.innerHTML = `<i class='bx bxs-${type === 'error' ? 'error-circle' : 'check-circle'}'></i> ${message}`;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '10000';
+            alertDiv.style.maxWidth = '350px';
+            alertDiv.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+
+            document.body.appendChild(alertDiv);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                alertDiv.style.opacity = '0';
+                alertDiv.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    document.body.removeChild(alertDiv);
+                }, 500);
+            }, 3000);
+        }
+
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            const fullname = this.querySelector('input[name="fullname"]').value.trim();
+            const email = this.querySelector('input[name="email"]').value.trim();
+            const password = this.querySelector('input[name="password"]').value;
+            const confirmPassword = this.querySelector('input[name="confirm_password"]').value;
+            const profileInput = this.querySelector('input[name="profile_picture"]');
+            const webcamInput = this.querySelector('input[name="webcam_image"]');
+            const previewImg = document.getElementById('profilePreview');
+
+            // Name validation
+            if (fullname.length < 2) {
+                e.preventDefault();
+                showAlert('Please enter a valid full name (minimum 2 characters)', 'error');
+                return false;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                showAlert('Please enter a valid email address', 'error');
+                return false;
+            }
+
+            // Password match validation
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                showAlert('Passwords do not match! Please make sure both passwords are identical.', 'error');
+                return false;
+            }
+
+            // Password length validation
+            if (password.length < 6) {
+                e.preventDefault();
+                showAlert('Password must be at least 6 characters long!', 'error');
+                return false;
+            }
+
+            const hasProfileImage = !!(profileInput && profileInput.files && profileInput.files.length > 0);
+            const hasWebcamImage = !!(webcamInput && webcamInput.value && webcamInput.value.trim().length > 0);
+            const previewSrc = previewImg ? (previewImg.getAttribute('src') || '').trim() : '';
+            const hasPreviewImage = !!(previewSrc && !previewSrc.includes('/static/img/avatar.svg'));
+            if (!hasProfileImage && !hasWebcamImage && !hasPreviewImage) {
+                e.preventDefault();
+                showAlert('Profile image is required. Please upload a photo or capture from webcam.', 'error');
+                return false;
+            }
+
+            // Password strength validation
+            const hasLetter = /[a-zA-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+
+            if (!hasLetter || !hasNumber) {
+                if (!confirm('For better security, we recommend using a password with both letters and numbers. Continue with current password?')) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+
+        // Login form validation
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            const username = this.querySelector('input[name="username"]').value.trim();
+            const password = this.querySelector('input[name="password"]').value;
+
+            if (!username || !password) {
+                e.preventDefault();
+                showAlert('Please fill in all required fields', 'error');
+                return false;
+            }
+        });
+
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(function () {
+            const flashMessages = document.querySelectorAll('.error, .success');
+            flashMessages.forEach(function (message) {
+                message.style.opacity = '0';
+                message.style.transition = 'opacity 0.5s';
+                setTimeout(function () {
+                    message.style.display = 'none';
+                }, 500);
+            });
+        }, 5000);
+
+        // Check URL parameters to show appropriate form
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('register') === 'true') {
+                container.classList.add('right-panel-active');
+            }
+            syncMobileSwitch();
+
+            // Remove animation classes after initial load
+            setTimeout(() => {
+                document.getElementById('loginForm').classList.remove('form-switch-animation');
+                document.getElementById('registerForm').classList.remove('form-switch-animation');
+            }, 700);
+
+            // Focus on first input
+            const firstInput = document.querySelector('.login-container input');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        });
+
+        // Stop webcam when leaving the page
+        window.addEventListener('beforeunload', function () {
+            stopWebcam();
+        });
+
+        // Add input focus effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.parentElement.querySelector('i').style.color = '#667eea';
+            });
+
+            input.addEventListener('blur', function () {
+                if (!this.value) {
+                    this.parentElement.querySelector('i').style.color = '#6c757d';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <title>Result Details - Online CheatBuster Admin</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --danger-gradient: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            --light: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--gray-50); color: var(--gray-900); }
+
+        #sidebar {
+            position: fixed; top: 0; left: 0; width: 280px; height: 100%;
+            background: var(--light); z-index: 2000;
+            transition: all 0.3s ease; box-shadow: var(--shadow-lg);
+            border-right: 1px solid var(--gray-200);
+        }
+        #sidebar.hide { width: 80px; }
+        #sidebar.hide .text { display: none; }
+        #sidebar .brand {
+            display: flex; align-items: center; gap: 15px; padding: 25px;
+            background: var(--primary-gradient); color: white; text-decoration: none;
+            font-size: 20px; font-weight: 700;
+        }
+        #sidebar .brand i { font-size: 32px; min-width: 32px; }
+        #sidebar .side-menu { padding: 20px 0; list-style: none; }
+        #sidebar .side-menu li { margin: 8px 15px; }
+        #sidebar .side-menu li a {
+            display: flex; align-items: center; gap: 15px; padding: 14px 20px;
+            border-radius: 12px; color: var(--gray-700); text-decoration: none;
+            font-weight: 500; transition: all 0.3s ease;
+        }
+        #sidebar .side-menu li a:hover { background: var(--gray-100); transform: translateX(5px); }
+        #sidebar .side-menu li.active a { background: var(--primary-gradient); color: white; box-shadow: var(--shadow-md); }
+        #sidebar .side-menu li a i { font-size: 24px; min-width: 24px; }
+
+        #content { position: relative; width: calc(100% - 280px); left: 280px; transition: all 0.3s ease; }
+        #content.expand { width: calc(100% - 80px); left: 80px; }
+
+        nav {
+            height: 70px; background: var(--light); padding: 0 30px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000;
+        }
+        nav .bx-menu { font-size: 28px; cursor: pointer; color: var(--gray-700); }
+        nav .nav-title {
+            font-size: 22px; font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        main { padding: 30px; min-height: calc(100vh - 70px); }
+        .head-title h1 { font-size: 30px; font-weight: 800; color: var(--gray-900); margin-bottom: 5px; }
+        .breadcrumb { display: flex; align-items: center; gap: 8px; list-style: none; padding: 0; font-size: 14px; margin-bottom: 30px; }
+        .breadcrumb li a { color: var(--gray-700); text-decoration: none; }
+        .breadcrumb li.active a { color: #667eea; font-weight: 600; }
+
+        .profile-card {
+            background: var(--light); border-radius: 20px; padding: 35px;
+            box-shadow: var(--shadow-md); border: 1px solid var(--gray-200);
+            display: flex; align-items: center; gap: 30px; margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .profile-card img {
+            width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+            border: 4px solid #667eea; box-shadow: var(--shadow-md); flex-shrink: 0;
+        }
+        .profile-card .info h2 { font-size: 26px; font-weight: 800; color: var(--gray-900); margin-bottom: 6px; }
+        .profile-card .info p { font-size: 15px; color: var(--gray-700); margin-bottom: 4px; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px; margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--light); border-radius: 16px; padding: 24px;
+            box-shadow: var(--shadow-md); border: 1px solid var(--gray-200);
+            text-align: center; transition: all 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .stat-card .stat-icon { font-size: 36px; margin-bottom: 10px; }
+        .stat-card .stat-value { font-size: 26px; font-weight: 800; color: var(--gray-900); }
+        .stat-card .stat-label { font-size: 12px; color: var(--gray-700); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .accordion-card {
+            background: var(--light); border-radius: 12px; margin-bottom: 15px;
+            box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); overflow: hidden;
+        }
+        .accordion-header {
+            background: var(--gray-50); padding: 20px 25px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            font-weight: 700; color: var(--gray-900); transition: background 0.3s;
+        }
+        .accordion-header:hover { background: var(--gray-100); }
+        .accordion-body { padding: 25px; display: none; border-top: 1px solid var(--gray-200); }
+
+        table { width: 100%; border-collapse: collapse; }
+        table thead tr { background: var(--primary-gradient); color: white; }
+        table thead th { padding: 14px 16px; text-align: left; font-weight: 600; font-size: 13px; text-transform: uppercase; }
+        table tbody td { padding: 16px; border-bottom: 1px solid var(--gray-200); font-size: 14px; }
+        table tbody tr:hover { background: var(--gray-50); }
+
+        .badge-pass { background: linear-gradient(135deg,#11998e,#38ef7d); color:white; padding:6px 18px; border-radius:50px; font-weight:600; font-size:13px; display:inline-flex; align-items:center; gap:5px; }
+        .badge-fail { background: linear-gradient(135deg,#eb3349,#f45c43); color:white; padding:6px 18px; border-radius:50px; font-weight:600; font-size:13px; display:inline-flex; align-items:center; gap:5px; }
+        .badge-terminated { background: linear-gradient(135deg,#f093fb,#f5576c); color:white; padding:6px 18px; border-radius:50px; font-weight:600; font-size:13px; display:inline-flex; align-items:center; gap:5px; }
+
+        .btn-back {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--primary-gradient); color: white; border: none;
+            padding: 10px 22px; border-radius: 50px; font-weight: 600;
+            text-decoration: none; transition: all 0.3s; box-shadow: var(--shadow-md);
+        }
+        .btn-back:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); color: white; text-decoration: none; }
+
+        @media screen and (max-width: 768px) {
+            #sidebar { width: 80px; }
+            #sidebar .text { display: none; }
+            #content { width: calc(100% - 80px); left: 80px; }
+            .profile-card { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <i class='bx bxs-graduation'></i>
+                        <span class="text">Online CheatBuster</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="{{ url_for('adminStudents') }}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Students</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="{{ url_for('adminResults') }}">
+                    <i class='bx bxs-trophy'></i>
+                    <span class="text">Results</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('adminLiveMonitoring') }}">
+                    <i class='bx bxs-camera'></i>
+                    <span class="text">Live Monitor</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="{{ url_for('logout') }}" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu' id="menu-btn"></i>
+            <span class="nav-title">Result Details</span>
+            <a href="{{ url_for('adminResults') }}" class="btn-back">
+                <i class='bx bx-arrow-back'></i> Back to Results
+            </a>
+        </nav>
+
+        <main>
+            <div class="head-title">
+                <h1>Student Exam History</h1>
+                <ul class="breadcrumb">
+                    <li><a href="{{ url_for('adminResults') }}">Results</a></li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li class="active"><a href="#">{{ student.student_name }}</a></li>
+                </ul>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="profile-card">
+                {% if student.student_profile %}
+                <img src="{{ url_for('static', filename='Profiles/' + student.student_profile) }}"
+                     alt="{{ student.student_name }}"
+                     onerror="this.src='https://ui-avatars.com/api/?name={{ student.student_name|urlencode }}&background=667eea&color=fff&size=110'">
+                {% else %}
+                <img src="https://ui-avatars.com/api/?name={{ student.student_name|urlencode }}&background=667eea&color=fff&size=110"
+                     alt="{{ student.student_name }}">
+                {% endif %}
+                <div class="info">
+                    <h2>{{ student.student_name }}</h2>
+                    <p><i class='bx bx-envelope'></i> {{ student.student_email or 'N/A' }}</p>
+                    <p><i class='bx bx-id-card'></i> Student ID: {{ student.student_id }}</p>
+                    <p><i class='bx bx-book'></i> Exam: Final Examination</p>
+                </div>
+            </div>
+
+            <!-- Overall Stats Summary -->
+            <h3 style="margin-bottom:20px; font-weight:700; color:var(--gray-900);">Overall Statistics Summary</h3>
+            <div class="stats-grid">
+                <!-- Attempt feature disabled
+                <div class="stat-card">
+                    <div class="stat-icon">🔄</div>
+                    <div class="stat-value">{{ summary.total_attempts }}</div>
+                    <div class="stat-label">Total Attempts Taken</div>
+                </div>
+                -->
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-value" style="color:#ef4444;">{{ summary.total_terminated }}</div>
+                    <div class="stat-label">Total Terminated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-value" style="color:#10b981;">{{ summary.total_passed }}</div>
+                    <div class="stat-label">Total Passed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-value">{{ summary.best_percentage }}%</div>
+                    <div class="stat-label">Best Percentage Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚫</div>
+                    <div class="stat-value">{{ summary.total_violations }}</div>
+                    <div class="stat-label">Total Violations</div>
+                </div>
+            </div>
+
+            <!-- Per-Attempt Accordion Cards -->
+            <h3 style="margin-bottom:20px; font-weight:700; color:var(--gray-900);">Exam History Audit Trail</h3>
+            
+            {% if attempts %}
+                {% for attempt in attempts %}
+                <div class="accordion-card">
+                    <div class="accordion-header" onclick="toggleAccordion('attempt-{{ attempt.attempt_num }}')">
+                        <div style="display:flex; align-items:center; gap:15px;">
+                            <span style="font-size:18px;">Exam Session {{ attempt.attempt_num }}</span>
+                            {% if attempt.status == 'PASS' %}
+                                <span class="badge-pass" style="padding:4px 10px; font-size:11px;">PASS</span>
+                            {% elif attempt.status == 'TERMINATED' %}
+                                <span class="badge-terminated" style="padding:4px 10px; font-size:11px;">TERMINATED</span>
+                            {% else %}
+                                <span class="badge-fail" style="padding:4px 10px; font-size:11px;">FAIL</span>
+                            {% endif %}
+                            <span style="font-weight:500; font-size:14px; color:var(--gray-700);">Score: {{ attempt.percentage }}%</span>
+                        </div>
+                        <i class='bx bx-chevron-down' id="icon-{{ attempt.attempt_num }}"></i>
+                    </div>
+                    
+                    <div class="accordion-body" id="attempt-{{ attempt.attempt_num }}">
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px; background:var(--gray-50); padding:20px; border-radius:10px;">
+                            <div><strong>Score:</strong> {{ attempt.score }}/{{ (attempt.total_questions or 125)*2 }}</div>
+                            <div><strong>Grade:</strong> <span style="color:{% if attempt.grade == 'A' %}#10b981{% elif attempt.grade == 'B' %}#3b82f6{% elif attempt.grade == 'C' %}#f59e0b{% else %}#ef4444{% endif %}; font-weight:bold;">{{ attempt.grade }}</span></div>
+                            <div><strong>Time Elapsed:</strong> {{ attempt.time_spent // 60 }}m {{ attempt.time_spent % 60 }}s</div>
+                            <div><strong>Submitted:</strong> {% if attempt.submission_time %}{{ attempt.submission_time.strftime('%d %B %Y at %H:%M') }}{% else %}N/A{% endif %}</div>
+                            {% if attempt.status == 'TERMINATED' or attempt.failure_reasons %}
+                            <div style="grid-column: 1 / -1; margin-top:10px; color:#ef4444;">
+                                <strong>Reason:</strong> {{ attempt.failure_reasons or 'Maximum warnings reached' }}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <h5 style="margin-bottom:15px; font-weight:600;"><i class='bx bxs-error-circle' style="color:#ef4444;margin-right:8px;"></i>Violations for this Session</h5>
+                        {% if attempt.violations %}
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Violation Type</th>
+                                        <th>Time Detected</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for v in attempt.violations %}
+                                    <tr>
+                                        <td><strong>{{ loop.index }}</strong></td>
+                                        <td>
+                                            <span style="text-transform:capitalize;font-weight:600;color:#ef4444;">
+                                                {{ (v.type or 'Unknown') | replace('_', ' ') }}
+                                            </span>
+                                        </td>
+                                        <td><small style="color:#888;">{{ v.time or 'N/A' }}</small></td>
+                                        <td style="color:#555;">{{ v.details or '—' }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div style="padding:20px; text-align:center; color:#888; background:var(--gray-50); border-radius:8px;">
+                            No violations recorded for this session.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="padding:40px; text-align:center; color:#888; background:var(--light); border-radius:12px; box-shadow:var(--shadow-sm);">
+                    No exam sessions found for this student.
+                </div>
+            {% endif %}
+
+        </main>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('hide');
+            document.getElementById('content').classList.toggle('expand');
+        });
+
+        function toggleAccordion(id) {
+            const body = document.getElementById(id);
+            const num = id.split('-')[1];
+            const icon = document.getElementById('icon-' + num);
+            if (body.style.display === 'block') {
+                $(body).slideUp(300);
+                icon.className = 'bx bx-chevron-down';
+            } else {
+                $(body).slideDown(300);
+                icon.className = 'bx bx-chevron-up';
+            }
+        }
+    </script>
+</body>
+</html>

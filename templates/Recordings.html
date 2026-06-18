@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordings - Admin</title>
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+        }
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 28px 0;
+            margin-bottom: 24px;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+        .badge-lite {
+            background: rgba(102,126,234,0.12);
+            color: #4f46e5;
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+        .file-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .file-row:last-child {
+            border-bottom: none;
+        }
+        .file-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .file-meta {
+            color: #6b7280;
+            font-size: 12px;
+        }
+        .btn-download {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        .btn-download:hover {
+            color: white;
+            background: #5a67d8;
+        }
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+            border: none;
+        }
+        .btn-delete:hover {
+            color: white;
+            background: #dc2626;
+        }
+        .inline-form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div>
+                <h2 class="mb-1"><i class='bx bxs-video-recording'></i> Recordings</h2>
+                <small>Session videos and audio evidence</small>
+            </div>
+            <div>
+                <a href="{{ url_for('adminStudents') }}" class="btn btn-light mr-2">
+                    <i class='bx bxs-group'></i> Students
+                </a>
+                <a href="{{ url_for('adminResults') }}" class="btn btn-outline-light">
+                    <i class='bx bxs-trophy'></i> Results
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category in ['error', 'danger'] else ('success' if category in ['success', 'register_success', 'login_success'] else 'info') }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="mb-3">
+            <input type="text" id="recording-search" class="form-control" placeholder="Search by student name...">
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <strong><i class='bx bxs-video'></i> Video Recordings</strong>
+                        <span class="badge-lite ml-2">{{ videos|length }} files</span>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if videos %}
+                            {% for v in videos %}
+                            <div class="file-row" data-student="{{ (v.student_name or '')|lower }}">
+                                <div>
+                                    <div class="file-name">{{ v.name }}</div>
+                                    <div class="file-meta">
+                                        {{ (v.size / (1024*1024))|round(2) }} MB
+                                        {% if v.student_name %}
+                                            • {{ v.student_name }}{% if v.student_id %} (ID {{ v.student_id }}){% endif %}
+                                        {% endif %}
+                                        {% if v.session_start %}
+                                            • {{ v.session_start }}
+                                        {% endif %}
+                                        {% if v.session_end %}
+                                            • {{ v.session_end }}
+                                        {% endif %}
+                                        {% if v.total_violations is not none %}
+                                            • Violations: {{ v.total_violations }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center" style="gap:8px;">
+                                    <button class="btn btn-sm btn-outline-secondary" type="button" data-toggle="collapse" data-target="#video-{{ loop.index }}">
+                                        <i class='bx bxs-play'></i> Preview
+                                    </button>
+                                    <a class="btn btn-sm btn-download" href="{{ url_for('download_recording_video', filename=v.name) }}">
+                                        <i class='bx bxs-download'></i> Download
+                                    </a>
+                                    <form method="POST" action="{{ url_for('delete_recording_video', filename=v.name) }}" class="inline-form" onsubmit="return confirm('Delete video recording {{ v.name }}?');">
+                                        <button class="btn btn-sm btn-delete" type="submit">
+                                            <i class='bx bxs-trash'></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="collapse" id="video-{{ loop.index }}">
+                                <div class="p-3">
+                                    <video controls class="synced-video" data-audio-id="video-audio-{{ loop.index }}" style="width:100%; border-radius:10px;">
+                                        <source src="{{ url_for('static', filename=v.static_path or ('recording/' + v.name)) }}" type="{{ v.mime_type or 'video/mp4' }}">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    {% if v.matched_audio and not v.name.lower().endswith('.webm') and not v.name.lower().endswith('.ogg') %}
+                                    <audio id="video-audio-{{ loop.index }}" preload="metadata" style="display:none;">
+                                        <source src="{{ url_for('static', filename=v.matched_audio.static_path or ('recording/audio/' + v.matched_audio.name)) }}">
+                                    </audio>
+                                    <div class="file-meta mt-2">
+                                        <i class='bx bxs-microphone'></i>
+                                        Synced audio: {{ v.matched_audio.name }}
+                                    </div>
+                                    {% elif v.name.lower().endswith('.webm') or v.name.lower().endswith('.ogg') %}
+                                    <div class="file-meta mt-2 text-success">
+                                        <i class='bx bxs-volume-full'></i>
+                                        Embedded audio included in this recording.
+                                    </div>
+                                    {% else %}
+                                    <div class="file-meta mt-2 text-warning">
+                                        <i class='bx bx-error-circle'></i>
+                                        No matched audio found for this video.
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-4 text-center text-muted">No video recordings found.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <strong><i class='bx bxs-microphone'></i> Audio Recordings</strong>
+                        <span class="badge-lite ml-2">{{ audios|length }} files</span>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if audios %}
+                            {% for a in audios %}
+                            <div class="file-row" data-student="{{ (a.student_name or '')|lower }}">
+                                <div>
+                                    <div class="file-name">{{ a.name }}</div>
+                                    <div class="file-meta">
+                                        {{ (a.size / (1024*1024))|round(2) }} MB
+                                        {% if a.student_name %}
+                                            • {{ a.student_name }}{% if a.student_id %} (ID {{ a.student_id }}){% endif %}
+                                        {% endif %}
+                                        {% if a.session_start %}
+                                            • {{ a.session_start }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center" style="gap:8px;">
+                                    <a class="btn btn-sm btn-download" href="{{ url_for('download_recording_audio', filename=a.name) }}">
+                                        <i class='bx bxs-download'></i>
+                                    </a>
+                                    <form method="POST" action="{{ url_for('delete_recording_audio', filename=a.name) }}" class="inline-form" onsubmit="return confirm('Delete audio recording {{ a.name }}?');">
+                                        <button class="btn btn-sm btn-delete" type="submit">
+                                            <i class='bx bxs-trash'></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="p-4 text-center text-muted">No audio recordings found.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const searchInput = document.getElementById('recording-search');
+        searchInput.addEventListener('input', function() {
+            const q = this.value.trim().toLowerCase();
+            document.querySelectorAll('.file-row').forEach(row => {
+                const student = row.getAttribute('data-student') || '';
+                row.style.display = !q || student.includes(q) ? '' : 'none';
+            });
+        });
+
+        // Keep matched audio in sync with video preview playback.
+        document.querySelectorAll('.synced-video').forEach(video => {
+            const audioId = video.getAttribute('data-audio-id');
+            const audio = audioId ? document.getElementById(audioId) : null;
+            if (!audio) return;
+
+            video.addEventListener('play', async () => {
+                try {
+                    audio.currentTime = video.currentTime || 0;
+                    audio.playbackRate = video.playbackRate || 1;
+                    audio.muted = video.muted;
+                    audio.volume = video.volume;
+                    await audio.play();
+                } catch (_) {}
+            });
+
+            video.addEventListener('pause', () => {
+                audio.pause();
+            });
+
+            video.addEventListener('seeking', () => {
+                try { audio.currentTime = video.currentTime || 0; } catch (_) {}
+            });
+
+            video.addEventListener('ratechange', () => {
+                audio.playbackRate = video.playbackRate || 1;
+            });
+
+            video.addEventListener('volumechange', () => {
+                audio.muted = video.muted;
+                audio.volume = video.volume;
+            });
+
+            video.addEventListener('ended', () => {
+                audio.pause();
+                try { audio.currentTime = 0; } catch (_) {}
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result - Failed</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Sorry.css') }}">
+</head>
+<body style="background-color: #e2e2e2;">
+    <nav>
+        <div class="left-links">
+            <p class="P-title">The Online CheatBuster</p>
+        </div>
+        <div class="right-links">
+            <a class="links" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </nav>
+    <section>
+        <span class="overlay"></span>
+        <div class="modal-container">
+            {% set status = 'Fail' %}
+            {% set name = '' %}
+            {% set score = 0 %}
+            {% set date_str = '' %}
+
+            {% if result %}
+                {% set status = 'Terminated' if result.auto_terminated else 'Fail' %}
+                {% set name = result.student_name or '' %}
+                {% set score = result.percentage or 0 %}
+            {% elif result_status %}
+                {% set r = result_status.split(';') %}
+                {% set name = r[0] %}
+                {% set score = r[1] %}
+                {% set status = r[2] %}
+            {% endif %}
+
+            {% if status == 'Fail' %}
+            <div class="modal-box">
+                <img src="{{ url_for('static', filename='img/bear.png') }}" alt="Icon" width="70" height="70" />
+                <h2>Sorry</h2>
+                <ul>
+                    <li>Name: {{ name }}</li>
+                    <li>Test Score: {{ score }}%</li>
+                    <li>Exam Status: Failed</li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="modal-box">
+                <img src="{{ url_for('static', filename='img/tiger.png') }}" alt="Icon" width="70" height="70" />
+                <h2>You did not follow the rules.</h2>
+                <ul>
+                    <li>Name: {{ name }}</li>
+                    <li>Test Score: {{ score }}%</li>
+                    <li>Exam Status: Terminated</li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    <footer>
+        <div class="container8">
+            <p class="box-footer1">&copy; The Online CheatBuster</p>
+        </div>
+    </footer>
+    <script>
+        window.onload = () => {
+            const modals = document.querySelectorAll(".modal-box");
+            const overlay = document.querySelector(".overlay");
+            modals.forEach(m => m.classList.add("show"));
+            overlay.addEventListener("click", () => modals.forEach(m => m.classList.remove("show")));
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <script src="https://unpkg.com/scrollreveal"></script>  
+    
+      <title>Exam Rules and Regulations</title>
+      <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --light: #f8f9ff;
+            --dark: #333344;
+            --text: #444;
+            --text-light: #666;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f5 100%);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .P-title {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .right-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .links {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .links:hover {
+            color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .links::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .links:hover::after {
+            width: 80%;
+        }
+
+        /* Hero Section */
+        #section-citação {
+            padding: 100px 5%;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #section-citação::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .container1 {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quote {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .author {
+            font-size: 18px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* Rules Section */
+        #section-diferenciais {
+            padding: 100px 5%;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 60px;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .container2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .box1, .box2, .box3, .box4, .box5, .box6 {
+            background: var(--light);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .box1:hover, .box2:hover, .box3:hover, .box4:hover, .box5:hover, .box6:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15);
+        }
+
+        .img-box1, .img-box2, .img-box3, .img-box4, .img-box5, .img-box6 {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .box1 div:last-child p, 
+        .box2 div:last-child p, 
+        .box3 div:last-child p, 
+        .box4 div:last-child p, 
+        .box5 div:last-child p, 
+        .box6 div:last-child p {
+            font-size: 16px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Requirements Section */
+        #section-header-prof {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 800;
+            margin: 80px 0 40px;
+            color: var(--dark);
+            position: relative;
+        }
+
+        #section-header-prof::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        #section-prof {
+            padding: 60px 5%;
+            background: var(--light);
+        }
+
+        .container3 {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .title2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .container3 ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .container3 li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            padding-left: 40px;
+            font-size: 16px;
+        }
+
+        .container3 li:last-child {
+            border-bottom: none;
+        }
+
+        .container3 li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Button Section */
+        .section-button {
+            padding: 80px 5%;
+            text-align: center;
+            background: white;
+        }
+
+        .nextButton {
+            display: inline-block;
+        }
+
+        .next {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .next:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        .box-footer1 {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .right-links {
+                gap: 15px;
+            }
+            
+            .quote {
+                font-size: 24px;
+            }
+            
+            .section-header, #section-header-prof {
+                font-size: 28px;
+            }
+            
+            .container2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .container3 {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .P-title {
+                font-size: 20px;
+            }
+            
+            .right-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .quote {
+                font-size: 20px;
+            }
+            
+            .section-header, #section-header-prof {
+                font-size: 24px;
+            }
+            
+            .next {
+                padding: 14px 30px;
+                font-size: 16px;
+            }
+        }
+      </style>
+  </head>
+
+   <body>
+    <main>
+
+      <!---Navigation Bar-->
+    <nav>
+      <div class="left-links">
+        <p class="P-title">The Online CheatBuster</p>
+      </div>
+      <div class="right-links">
+        <a class="links" href="#section-diferenciais">Rules</a>
+        <a class="links" href="#section-header-prof">Requirements</a>
+      </div>
+    </nav>
+
+      <!-- Section: Citação-->
+      <section id="section-citação">
+          <div class="container1">
+            <p class="quote">"As students take the test, System monitors their camera, mic and the screen they are looking at."</p>
+            <p class="author">– Online Exam CheatBuster –</p>
+          </div>
+      </section>
+
+      <!-- Section: Diferenciais-->
+      <section id="section-diferenciais">
+
+        <h2 class="section-header">Rules & Regulations</h2>
+
+        <div class="container2">
+
+          <div class="box1">
+              <div>
+                <img class="img-box1" src="{{url_for('static', filename='img/101391-online-test_zu1cw4.gif')}}" alt="Online Test">
+              </div>
+
+              <div>
+                <p>Monitors your camera and microphone during the exam. When you load the exam, grant permissions for both to Exam Proctor.</p>
+              </div>
+          </div>
+
+          <div class="box2">
+            <div>
+              <img class="img-box2" src="{{url_for('static', filename='img/Not-detect-face.png')}}" alt="Face Not Detected">
+            </div>
+            <div>
+              <p>If the camera doesn't detect your face, System calls these events VIOLATIONS.</p>
+            </div>
+          </div>
+
+          <div class="box3">
+            <div>
+              <img class="img-box3" src="{{url_for('static', filename='img/Detect-face.png')}}" alt="Face Detected">
+            </div>
+            <div>
+              <p>During the exam, make sure the camera can focus on your face.</p>
+            </div>
+          </div>
+          
+          <div class="box4">
+            <div>
+              <img class="img-box4" src="{{url_for('static', filename='img/Take-photo.png')}}" alt="Take Photo">
+            </div>
+            <div>
+              <p>Once your face is detected, the first photo will be taken.</p>
+            </div>
+          </div>
+
+          <div class="box5">
+            <div>
+              <img class="img-box5" src="{{url_for('static', filename='img/Detect-two-persons.png')}}" alt="Two Persons Detected">
+            </div>
+            <div>
+              <p>Make sure that only you are in front of the exam. The background should be as clean as possible.</p>
+            </div>
+          </div>
+          
+          <div class="box6">
+            <div>
+              <img class="img-box6" src="{{url_for('static', filename='img/Talking.png')}}" alt="Talking Detected">
+            </div>
+            <div>
+              <p>You must take the exam in a quiet environment. If any sound is detected, it will be recorded.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section: Professora-->
+      <h2 id="section-header-prof">How to setup your Environment</h2>
+      <section id="section-prof">
+
+        <div class="container3">
+            <h2 class="title2">Test environment</h2>
+            <ul>
+                <li>You must sit at a clean desk or table.</li>
+                <li>You must take the exam in the same room that you scanned during the proctoring setup for the current exam.</li>
+                <li>The room must be as quiet as possible. Sounds such as music or television are not permitted.</li>
+                <li>No other person is allowed to enter the room while you are taking the proctored exam.</li>
+                <li>The following items must not be on your desk or used during your proctored exam, unless posted rules for the exam specifically permit these materials: Books, Paper, Pens, Calculators, Textbooks, Notebooks, Phones.</li>
+            </ul>
+        </div>
+
+      </section>
+      
+      <section class="section-button">
+        <div class="nextButton">
+        <a href="{{ url_for('systemCheck') }}" class="next">
+          <i class="fas fa-arrow-right"></i> Next Step
+        </a>
+      </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <div class="container8">
+          <div>
+            <p class="box-footer1">&copy; The Online CheatBuster</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Scroll Reveal Animation
+        ScrollReveal().reveal('.box1, .box2, .box3, .box4, .box5, .box6', {
+            delay: 200,
+            distance: '50px',
+            origin: 'bottom',
+            interval: 100,
+            duration: 800,
+            easing: 'ease-out'
+        });
+
+        ScrollReveal().reveal('.container3', {
+            delay: 300,
+            distance: '50px',
+            origin: 'bottom',
+            duration: 800,
+            easing: 'ease-out'
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+  </body>
+</html>
